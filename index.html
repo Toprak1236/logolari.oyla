@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Oylama Sitesi</title>
+  <meta charset="UTF-8">
+  <title>Resim Oylama</title>
   <style>
-    .image-box {
-      margin-bottom: 20px;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #oy-sayisi {
+      font-size: 20px;
+      margin-top: 10px;
     }
     button {
-      padding: 10px;
+      padding: 10px 20px;
       font-size: 16px;
+      cursor: pointer;
+    }
+    img {
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>Oylama Sayfası</h1>
-  <div id="images"></div>
+
+  <h1>Arcade Bloom</h1>
+
+  <img src="arcade_bloom.png" width="300" alt="Arcade Bloom">
+
+  <div>
+    <button onclick="oyVer()">Oyla</button>
+    <div id="oy-sayisi">Oylar yükleniyor...</div>
+  </div>
 
   <script>
-    // Görsel listesi (resmi proje klasöründe "resimler" klasöründe sakla)
-    const images = [
-      {
-        id: 1,
-        src: "resimler/Arcade Bloom.png", // Kendi resim yolun
-        votes: 0
-      }
-    ];
+    const oylarKey = 'oySayisi';
 
-    function renderImages() {
-      const container = document.getElementById("images");
-      container.innerHTML = "";
-      images.forEach(img => {
-        const box = document.createElement("div");
-        box.className = "image-box";
-        box.innerHTML = `
-          <img src="${img.src}" width="300"><br>
-          <button onclick="vote(${img.id})">Oyla</button>
-          <p>${img.votes} kişi oy verdi</p>
-        `;
-        container.appendChild(box);
-      });
+    // Oy sayısını localStorage'dan al veya 0 yap
+    let oySayisi = localStorage.getItem(oylarKey);
+    if (oySayisi === null) {
+      oySayisi = 0;
+    } else {
+      oySayisi = parseInt(oySayisi);
     }
 
-    function vote(id) {
-      const img = images.find(i => i.id === id);
-      if (img) img.votes += 1;
-      renderImages();
+    // Sayıyı güncelle
+    function guncelleOySayisi() {
+      document.getElementById('oy-sayisi').innerText = `${oySayisi} kişi oyladı`;
     }
 
-    renderImages();
+    // Oylama fonksiyonu
+    function oyVer() {
+      oySayisi++;
+      localStorage.setItem(oylarKey, oySayisi);
+      guncelleOySayisi();
+    }
+
+    // Sayfa açıldığında göster
+    guncelleOySayisi();
   </script>
+
 </body>
 </html>
